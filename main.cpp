@@ -10,12 +10,31 @@ GLfloat eye_x,eye_y,eye_z;
 
 //Look At Positions
 GLfloat look_x, look_y,look_z;
+
+//
+GLfloat up_x, up_y, up_z;
 //Angles
 GLfloat alpha,bita,theta;
+void initialize() {
+    eye_x = 0;//95;
+    eye_y = 0;
+    eye_z = 95;//50;
+
+    look_x = 0;//0;
+    look_y = 0;
+    look_z = 0;//50;
+
+    up_x = 0;
+    up_y = 1;
+    up_z = 0;
+}
 void Yaw(){
 }
 
 void roll(){
+
+}
+void pitch(){
 
 }
 void zoom(bool positive = true){
@@ -287,6 +306,8 @@ void displayFunction() {
 
     //Set Camera Definition
     gluLookAt(eye_x,eye_y,eye_z,look_x,look_y,look_z,0,1,0);
+    glTranslatef(50,-25,0);
+    glRotatef(270,0,1,0);
     glViewport(0,0,800,600);
     drawMainAxis();
 
@@ -356,19 +377,6 @@ void keyBoardFunction(unsigned char key,int x,int y) {
         eye_z++;
         break;
     }
-}
-void initialize() {
-    eye_x = 95;
-    eye_y = 25;
-    eye_z = 50;
-
-    look_x = 0;
-    look_y = 25;
-    look_z = 50;
-
-    alpha= 1;
-    bita = 1;
-    theta = 1;
 }
 int main(int argc,char **argv) {
     initialize();
