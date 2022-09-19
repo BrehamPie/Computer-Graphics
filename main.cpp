@@ -4,6 +4,7 @@
 #include<windows.h>
 #include<bits/stdc++.h>
 using namespace std;
+const float PI = acos(-1.0);
 /*------Global Variables------*/
 //Eye Positions
 GLfloat eye_x,eye_y,eye_z;
@@ -31,8 +32,12 @@ void initialize() {
 void Yaw(){
 }
 
-void roll(){
+void roll(bool clock = true){
+    if(clock)alpha++;
+    else alpha--;
 
+    up_x = -sin(PI*alpha/180.0);
+    up_y = cos(PI*alpha/180);
 }
 void pitch(){
 
@@ -305,7 +310,7 @@ void displayFunction() {
     glLoadMatrixf(&idd[0]);
 
     //Set Camera Definition
-    gluLookAt(eye_x,eye_y,eye_z,look_x,look_y,look_z,0,1,0);
+    gluLookAt(eye_x,eye_y,eye_z,look_x,look_y,look_z,up_x,up_y,up_z);
     glTranslatef(50,-25,0);
     glRotatef(270,0,1,0);
     glViewport(0,0,800,600);
@@ -350,6 +355,13 @@ void keyBoardFunction(unsigned char key,int x,int y) {
         break;
     case '8':
         scale(.75,.75,.75);
+        break;
+    case '9':
+        roll();
+        cout<<"rolling"<<' '<<up_x<<' '<<up_y<<endl;
+        break;
+    case '7':
+        roll(false);
         break;
     case '4':
         look_x--;
