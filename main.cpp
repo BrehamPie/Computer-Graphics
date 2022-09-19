@@ -21,14 +21,23 @@ void initialize() {
     eye_x = 0;//95;
     eye_y = 0;
     eye_z = 95;//50;
+    eye_x = 95;
+    eye_y = 20;
+    eye_z = 50;
 
     look_x = 0;//0;
     look_y = 0;
     look_z = 0;//50;
 
+    look_x = 0;
+    look_y = 20;
+    look_z = 50;
+
     up_x = 0;
     up_y = 1;
     up_z = 0;
+
+    alpha = 0,bita = 0,theta = 0;
 }
 void Yaw(bool clock = true) {
     // Translate to origin
@@ -326,6 +335,28 @@ void drawWindow() {
     glLineWidth(1);
     glPopMatrix();
 }
+
+void drawTable(){
+    glTranslatef(5,0,30);
+    glPushMatrix();
+    glTranslatef(20,15,20);
+    glScalef(25,2,15);
+    GLfloat color[] = {.09,.02,.03};
+    drawCube(color);
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(20,5,20);
+    glScalef(1,12,1);
+    drawCube(color);
+    glTranslatef(24,0,0);
+    drawCube(color);
+    glTranslatef(0,0,14);
+    drawCube(color);
+    glTranslatef(-24,0,0);
+    drawCube(color);
+    glPopMatrix();
+    glTranslatef(-5,0,-30);
+}
 void displayFunction() {
     // Clear Current Buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -343,11 +374,11 @@ void displayFunction() {
 
     //Set Camera Definition
     gluLookAt(eye_x,eye_y,eye_z,look_x,look_y,look_z,up_x,up_y,up_z);
-    glTranslatef(50,-25,0);
-    glRotatef(270,0,1,0);
+   // glTranslatef(50,-25,0);
+   // glRotatef(270,0,1,0);
     glViewport(0,0,800,600);
     drawMainAxis();
-
+    drawTable();
     drawFloor();
     drawSideWalls();
     drawRefrigerator();
