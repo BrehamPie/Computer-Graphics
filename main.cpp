@@ -85,11 +85,14 @@ void zoom(bool positive = true) {
     float dy = look_y - eye_y;
     float dz = look_z - eye_z;
     float unit_dist = sqrt(dx*dx+dy*dy+dz*dz);
-    if(unit_dist<=1 && positive)return;
+    if(unit_dist<=.1 && positive)return;
     if(!positive)unit_dist*=-1;
     eye_x+=dx/unit_dist;
     eye_y+=dy/unit_dist;
     eye_z+=dz/unit_dist;
+    look_x+=dx/unit_dist;
+    look_y+=dy/unit_dist;
+    look_z+=dz/unit_dist;
     cout<<eye_x<<' '<<eye_y<<' '<<eye_z<<endl;
     cout<<"Look:"<<look_x<<' '<<look_y<<' '<<look_z<<endl;
 }
@@ -376,6 +379,40 @@ void drawSideWindow(){
     drawCube(out_color);
     glPopMatrix();
 }
+void drawStove(){
+    glTranslatef(24,24,8);
+    glPushMatrix();
+    glScalef(16,2,6);
+    GLfloat boxColor[]={.85,.34,.52};
+    drawCube(boxColor);
+    glPopMatrix();
+    glPushMatrix();
+    GLfloat switchC[]={0,0,0};
+    glTranslatef(5,1.2,6.5);
+    glScalef(.2,.4,.2);
+    drawCube(switchC);
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(13,1.2,6.5);
+    glScalef(.2,.4,.2);
+    drawCube(switchC);
+    glPopMatrix();
+    glPushMatrix();
+    glColor3f(.78,.85,.34);
+    GLUquadricObj *quadratic;
+    quadratic = gluNewQuadric();
+    glTranslatef(5,2.5,3);
+    glRotatef(90,1,0,0);
+    gluCylinder(quadratic,1.5,1.5,1.0f,32,32);
+    glPopMatrix();
+    glPushMatrix();
+    quadratic = gluNewQuadric();
+    glTranslatef(13,2.5,3);
+    glRotatef(90,1,0,0);
+    gluCylinder(quadratic,1.5,1.5,1.0f,32,32);
+    glPopMatrix();
+    glTranslatef(-24,-24,-8);
+}
 void drawTable(){
     glTranslatef(5,0,30);
     glPushMatrix();
@@ -447,6 +484,7 @@ void displayFunction() {
     glRotatef(270,0,1,0);
     glViewport(0,0,800,600);
     drawMainAxis();
+    drawStove();
     drawBigWindow();
     drawSideWindow();
     drawChairs();
@@ -457,7 +495,7 @@ void displayFunction() {
     drawFoot();
     drawOvenBox();
     drawDrawers();
-   drawWindow();
+    drawWindow();
     glFlush();
     glutSwapBuffers();
 
