@@ -29,13 +29,26 @@ void initialize() {
     up_y = 1;
     up_z = 0;
 }
-void Yaw(){
+void Yaw(bool clock = true){
+    // Translate to origin
+    if(clock)bita++;
+    else bita--;
+    GLfloat dx = 0;//look_x - eye_x;
+    GLfloat dy = 0;//look_y - eye_y;
+    GLfloat dz = -eye_z;
+
+    GLfloat new_x = dx;
+    GLfloat new_y = dy*cos(bita*PI/180.0)-dz*sin(bita*PI/180.0);
+    GLfloat new_z = dy*sin(bita*PI/180.0) +dz*cos(bita*PI/180.0);
+
+    look_x = new_x;
+    look_y = new_y;
+    look_z = new_z;
 }
 
 void roll(bool clock = true){
     if(clock)alpha++;
     else alpha--;
-
     up_x = -sin(PI*alpha/180.0);
     up_y = cos(PI*alpha/180);
 }
@@ -354,7 +367,7 @@ void keyBoardFunction(unsigned char key,int x,int y) {
         for(int i=0;i<16;i++)cout<<idd[i]<<' ';cout<<endl;
         break;
     case '8':
-        scale(.75,.75,.75);
+        Yaw();
         break;
     case '9':
         roll();
@@ -367,7 +380,7 @@ void keyBoardFunction(unsigned char key,int x,int y) {
         look_x--;
         break;
     case '2':
-        look_y--;
+        Yaw(false);
         break;
 
     case 'x':
