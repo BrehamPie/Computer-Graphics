@@ -39,12 +39,12 @@ void initialize() {
 
     alpha = 0,bita = 0,theta = 0;
 }
-void Yaw(bool clock = true) {
+void Pitch(bool clock = true) {
     // Translate to origin
     if(clock)bita++;
     else bita--;
-    if(bita>270)bita = 270;
-    if(bita<-270)bita = -270;
+    //if(bita>270)bita = 270;
+   // if(bita<-270)bita = -270;
     GLfloat dx = 0;//look_x - eye_x;
     GLfloat dy = 0;//look_y - eye_y;
     GLfloat dz = -eye_z;
@@ -55,8 +55,10 @@ void Yaw(bool clock = true) {
 
     look_x = new_x;
     look_y = new_y;
-    look_z = new_z;
-    cout<<"Bita:"<<bita<<endl;
+    look_z = new_z-dz;
+    cout<<"Bita:"<<bita<<' '<<new_y<<' '<<new_z<<endl;
+
+
 }
 
 void Roll(bool clock = true) {
@@ -65,7 +67,7 @@ void Roll(bool clock = true) {
     up_x = -sin(PI*alpha/180.0);
     up_y = cos(PI*alpha/180);
 }
-void Pitch(bool clock = true) {
+void Yaw(bool clock = true) {
     if(clock) theta++;
     else theta--;
     GLfloat dx = 0;//look_x - eye_x;
@@ -78,7 +80,8 @@ void Pitch(bool clock = true) {
 
     look_x = new_x;
     look_y = new_y;
-    look_z = new_z;
+    look_z = -dz+new_z;
+     cout<<"Yaw:"<<theta<<' '<<new_x<<' '<<new_z<<endl;
 }
 void zoom(bool positive = true) {
     float dx = look_x - eye_x;
@@ -152,6 +155,9 @@ void drawCube(GLfloat color[]) {
         {1, 2, 6, 5}
     };
     for(int i=0; i<6; i++) {
+            color[0]+=.01;
+            color[1]+=.01;
+            color[2]+=.01;
         drawQuad(vertex[index[i][0]],
                  vertex[index[i][1]],
                  vertex[index[i][2]],
@@ -252,7 +258,7 @@ void drawOvenBox() {
     glTranslatef(5,10,5);
     glTranslatef(0,0,19);
     glScalef(9,35,1);
-    GLfloat color[] = {.64,.57,.5};
+    GLfloat color[] = {.05,.2,.05};
     drawCube(color);
     glTranslatef(0,0,12);
     drawCube(color);
@@ -272,7 +278,23 @@ void drawOvenBox() {
 }
 void drawOvens() {
     glPushMatrix();
-
+    glTranslatef(7,22,24);
+    glPushMatrix();
+    glScalef(5,8,10);
+    GLfloat color[]={.81,.47,.76};
+    GLfloat color2[]={.22,.01,.19};
+    GLfloat color3[]={.65,.77,.93};
+    drawCube(color);
+    glPopMatrix();
+    glPushMatrix();
+    glScalef(5.2,8.2,3);
+    drawCube(color2);
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(0,2,2);
+    glScalef(5.1,4.5,7.9);
+    drawCube(color3);
+    glPopMatrix();
     glPopMatrix();
 }
 void drawDrawers() {
@@ -305,6 +327,66 @@ void drawDrawers() {
     glScalef(35,1,10);
     drawCube(ucolor);
     glPopMatrix();
+}
+void drawPartition(){
+    glPushMatrix();
+    glTranslatef(5,5,5);
+    glTranslatef(10,11.5,10);
+    glScalef(.51,.31,9);
+    GLfloat color[] = {1,0,0};
+    drawCube(color);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(5,5,5);
+    glTranslatef(20,5,9.5);
+    glScalef(1,13,1);
+    drawCube(color);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(5,5,5);
+    glTranslatef(35,5,9.5);
+    glScalef(1,13,1);
+    drawCube(color);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(5,5,5);
+    glTranslatef(20,10,9.5);
+    glScalef(15,.41,.61);
+    drawCube(color);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(5,5,5);
+    glTranslatef(35,13.5,9.5);
+    glScalef(9,.41,.61);
+    drawCube(color);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(5,5,5);
+    glTranslatef(35,8.5,9.5);
+    glScalef(9,.41,.61);
+    drawCube(color);
+    glPopMatrix();
+
+
+    glPushMatrix();
+    glTranslatef(5,5,5);
+    glTranslatef(11,13.5,10);
+    glScalef(9,.41,.61);
+    drawCube(color);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(5,5,5);
+    glTranslatef(11,8.5,10);
+    glScalef(9,.41,.61);
+    drawCube(color);
+    glPopMatrix();
+
 }
 GLfloat idd[]= {1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1};
 void drawWindow() {
@@ -463,6 +545,45 @@ void drawChairs(){
     drawChair(4,22,true);
     drawChair(11,22,true);
 }
+
+void drawShelves(){
+    GLfloat color[]={.4,.2,.21};
+    GLfloat color2[] = {.04,.93,.05};
+    glPushMatrix();
+    glTranslatef(5,35,5);
+    glScalef(5,5,12);
+    drawCube(color);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(10,35,9);
+    glScalef(.4,5,.4);
+    drawCube(color2);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(10,35,13);
+    glScalef(.4,5,.4);
+    drawCube(color2);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(15,40,5);
+    glScalef(10,5,5);
+    drawCube(color);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(18,40,10);
+    glScalef(.4,5,.4);
+    drawCube(color2);
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(22,40,10);
+    glScalef(.4,5,.4);
+    drawCube(color2);
+    glPopMatrix();
+}
 void displayFunction() {
     // Clear Current Buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -484,6 +605,8 @@ void displayFunction() {
     glRotatef(270,0,1,0);
     glViewport(0,0,800,600);
     drawMainAxis();
+    drawOvens();
+    drawPartition();
     drawStove();
     drawBigWindow();
     drawSideWindow();
@@ -495,7 +618,8 @@ void displayFunction() {
     drawFoot();
     drawOvenBox();
     drawDrawers();
-    drawWindow();
+    drawShelves();
+   // drawWindow();
     glFlush();
     glutSwapBuffers();
 
@@ -512,11 +636,11 @@ void keyBoardFunction(unsigned char key,int x,int y) {
     case '-':
         zoom(false);
         break;
-    case '6':
-        Pitch();
+    case '2':
+        Pitch(false);
         break;
     case '8':
-        Yaw();
+        Pitch();
         break;
     case '9':
         Roll();
@@ -525,9 +649,9 @@ void keyBoardFunction(unsigned char key,int x,int y) {
         Roll(false);
         break;
     case '4':
-        Pitch(false);
+        Yaw();
         break;
-    case '2':
+    case '6':
         Yaw(false);
         break;
     case '5':
