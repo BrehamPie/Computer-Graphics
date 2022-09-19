@@ -5,6 +5,7 @@
 #include<bits/stdc++.h>
 using namespace std;
 const float PI = acos(-1.0);
+const float eps = 1e-6;
 /*------Global Variables------*/
 //Eye Positions
 GLfloat eye_x,eye_y,eye_z;
@@ -72,10 +73,13 @@ void zoom(bool positive = true) {
     float dy = look_y - eye_y;
     float dz = look_z - eye_z;
     float unit_dist = sqrt(dx*dx+dy*dy+dz*dz);
+    if(unit_dist<=1 && positive)return;
     if(!positive)unit_dist*=-1;
     eye_x+=dx/unit_dist;
     eye_y+=dy/unit_dist;
-    eye_x+=dz/unit_dist;
+    eye_z+=dz/unit_dist;
+    cout<<eye_x<<' '<<eye_y<<' '<<eye_z<<endl;
+    cout<<"Look:"<<look_x<<' '<<look_y<<' '<<look_z<<endl;
 }
 void drawLine(GLfloat A[],GLfloat B[],const GLfloat Color[]) {
     glColor3fv(&Color[0]);
@@ -385,7 +389,9 @@ void keyBoardFunction(unsigned char key,int x,int y) {
     case '2':
         Yaw(false);
         break;
-
+    case '5':
+        initialize();
+        break;
     case 'x':
         eye_x--;
         break;
