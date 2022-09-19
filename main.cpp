@@ -29,7 +29,7 @@ void initialize() {
     up_y = 1;
     up_z = 0;
 }
-void Yaw(bool clock = true){
+void Yaw(bool clock = true) {
     // Translate to origin
     if(clock)bita++;
     else bita--;
@@ -46,16 +46,28 @@ void Yaw(bool clock = true){
     look_z = new_z;
 }
 
-void roll(bool clock = true){
+void Roll(bool clock = true) {
     if(clock)alpha++;
     else alpha--;
     up_x = -sin(PI*alpha/180.0);
     up_y = cos(PI*alpha/180);
 }
-void pitch(){
+void Pitch(bool clock = true) {
+    if(clock) theta++;
+    else theta--;
+    GLfloat dx = 0;//look_x - eye_x;
+    GLfloat dy = 0;//look_y - eye_y;
+    GLfloat dz = -eye_z;
 
+    GLfloat new_x = dx*cos(theta*PI/180.0)+dz*sin(theta*PI/180.0);
+    GLfloat new_y = dy;
+    GLfloat new_z = -dx*sin(theta*PI/180.0) +dz*cos(theta*PI/180.0);
+
+    look_x = new_x;
+    look_y = new_y;
+    look_z = new_z;
 }
-void zoom(bool positive = true){
+void zoom(bool positive = true) {
     float dx = look_x - eye_x;
     float dy = look_y - eye_y;
     float dz = look_z - eye_z;
@@ -275,8 +287,8 @@ void drawDrawers() {
     drawCube(ucolor);
     glPopMatrix();
 }
-GLfloat idd[]={1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1};
-void drawWindow(){
+GLfloat idd[]= {1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1};
+void drawWindow() {
     GLfloat p[]= {0,0,0},q[]= {0,1,0},r[]= {0,1,1},s[]= {0,0,1};
     GLfloat color[]= {.55,.94,.88};
     glPushMatrix();
@@ -287,7 +299,7 @@ void drawWindow(){
     glPopMatrix();
 
     glPushMatrix();
-    GLfloat lineColor[]={.54,.37,.27};
+    GLfloat lineColor[]= {.54,.37,.27};
     glTranslatef(5,5,5);
     glTranslatef(1,25,8);
     glScalef(1,12,8);
@@ -296,13 +308,16 @@ void drawWindow(){
     drawLine(p,q,lineColor);
     p[2]=0,q[2]=0;
     glLineWidth(7.5);
-    p[1]=-.1;q[1]=1.1;
+    p[1]=-.1;
+    q[1]=1.1;
     drawLine(p,q,lineColor);
-    p[1]=0;q[1]=1;
+    p[1]=0;
+    q[1]=1;
     drawLine(q,r,lineColor);
     r[1]=1.1,s[1]=-.1;
     drawLine(r,s,lineColor);
-    r[1]=1;s[1]=0;
+    r[1]=1;
+    s[1]=0;
     drawLine(p,s,lineColor);
     glLineWidth(1);
     glPopMatrix();
@@ -344,16 +359,6 @@ void displayFunction() {
 void idleFunction() {
     glutPostRedisplay();
 }
-void translate(float x,float y,float z){
-    idd[12]+=x;
-    idd[13]+=y;
-    idd[14]+=z;
-}
-void scale(float x,float y,float z){
-    idd[0]*=x;
-    idd[5]*=y;
-    idd[10]*=z;
-}
 void keyBoardFunction(unsigned char key,int x,int y) {
     switch(key) {
     case '+':
@@ -363,21 +368,19 @@ void keyBoardFunction(unsigned char key,int x,int y) {
         zoom(false);
         break;
     case '6':
-        scale(2,2,1);
-        for(int i=0;i<16;i++)cout<<idd[i]<<' ';cout<<endl;
+        Pitch();
         break;
     case '8':
         Yaw();
         break;
     case '9':
-        roll();
-        cout<<"rolling"<<' '<<up_x<<' '<<up_y<<endl;
+        Roll();
         break;
     case '7':
-        roll(false);
+        Roll(false);
         break;
     case '4':
-        look_x--;
+        Pitch(false);
         break;
     case '2':
         Yaw(false);
