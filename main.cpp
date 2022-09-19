@@ -21,17 +21,17 @@ void initialize() {
     eye_x = 0;//95;
     eye_y = 0;
     eye_z = 95;//50;
-    eye_x = 95;
-    eye_y = 20;
-    eye_z = 50;
+//    eye_x = 95;
+//    eye_y = 20;
+//    eye_z = 50;
 
     look_x = 0;//0;
     look_y = 0;
     look_z = 0;//50;
 
-    look_x = 0;
-    look_y = 20;
-    look_z = 50;
+//    look_x = 0;
+//    look_y = 20;
+//    look_z = 50;
 
     up_x = 0;
     up_y = 1;
@@ -43,6 +43,8 @@ void Yaw(bool clock = true) {
     // Translate to origin
     if(clock)bita++;
     else bita--;
+    if(bita>270)bita = 270;
+    if(bita<-270)bita = -270;
     GLfloat dx = 0;//look_x - eye_x;
     GLfloat dy = 0;//look_y - eye_y;
     GLfloat dz = -eye_z;
@@ -54,6 +56,7 @@ void Yaw(bool clock = true) {
     look_x = new_x;
     look_y = new_y;
     look_z = new_z;
+    cout<<"Bita:"<<bita<<endl;
 }
 
 void Roll(bool clock = true) {
@@ -335,7 +338,44 @@ void drawWindow() {
     glLineWidth(1);
     glPopMatrix();
 }
-
+void drawBigWindow(){
+    glPushMatrix();
+    glTranslatef(0,20,53);
+    glScalef(5.5,17,22);
+    GLfloat in_color[] = {.4,.58,.94};
+    drawCube(in_color);
+    glPopMatrix();
+    glPushMatrix();
+    GLfloat out_color[] ={.12,0.01,0.05};
+    glTranslatef(0,19,52);
+    glScalef(5.4,19,23.7);
+    drawCube(out_color);
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(0,20,63);
+    glScalef(5.6,17,1);
+    drawCube(out_color);
+    glPopMatrix();
+}
+void drawSideWindow(){
+    glPushMatrix();
+    glTranslatef(28,28,0);
+    glScalef(12,15,5.5);
+    GLfloat in_color[] = {.4,.58,.94};
+    drawCube(in_color);
+    glPopMatrix();
+    glPushMatrix();
+    GLfloat out_color[] ={.12,0.01,0.05};
+    glTranslatef(27,27,0);
+    glScalef(14,17,5.4);
+    drawCube(out_color);
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(33,28,0);
+    glScalef(1,15,5.6);
+    drawCube(out_color);
+    glPopMatrix();
+}
 void drawTable(){
     glTranslatef(5,0,30);
     glPushMatrix();
@@ -357,6 +397,35 @@ void drawTable(){
     glPopMatrix();
     glTranslatef(-5,0,-30);
 }
+void drawChair(float dx,float dy,bool Rotate = false){
+    glPushMatrix();
+    glTranslatef(35+dx,5,47+dy);
+    if(Rotate){
+        glRotatef(180,0,1,0);
+    }
+    glPushMatrix();
+    glTranslatef(0,5,0);
+    glScalef(4,1,5);
+
+    GLfloat color[] = {.77,.08,.19};
+    drawCube(color);
+    glPopMatrix();
+    glPushMatrix();
+    glScalef(4,13,1);
+    drawCube(color);
+    glTranslatef(0,0,4);
+    glScalef(1,5.0/13.0,1);
+    drawCube(color);
+    glPopMatrix();
+    glPopMatrix();
+
+}
+void drawChairs(){
+    drawChair(0,0);
+    drawChair(7,0);
+    drawChair(4,22,true);
+    drawChair(11,22,true);
+}
 void displayFunction() {
     // Clear Current Buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -374,10 +443,13 @@ void displayFunction() {
 
     //Set Camera Definition
     gluLookAt(eye_x,eye_y,eye_z,look_x,look_y,look_z,up_x,up_y,up_z);
-   // glTranslatef(50,-25,0);
-   // glRotatef(270,0,1,0);
+    glTranslatef(50,-25,0);
+    glRotatef(270,0,1,0);
     glViewport(0,0,800,600);
     drawMainAxis();
+    drawBigWindow();
+    drawSideWindow();
+    drawChairs();
     drawTable();
     drawFloor();
     drawSideWalls();
@@ -385,7 +457,7 @@ void displayFunction() {
     drawFoot();
     drawOvenBox();
     drawDrawers();
-    drawWindow();
+   drawWindow();
     glFlush();
     glutSwapBuffers();
 
