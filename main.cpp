@@ -17,6 +17,10 @@ GLfloat look_x, look_y,look_z;
 GLfloat up_x, up_y, up_z;
 //Angles
 GLfloat alpha,bita,theta;
+// Scale Factors
+GLfloat S;
+//Near and Far Plane
+GLfloat nearP,farP;
 void initialize() {
     eye_x = 0;//95;
     eye_y = 0;
@@ -36,8 +40,10 @@ void initialize() {
     up_x = 0;
     up_y = 1;
     up_z = 0;
-
     alpha = 0,bita = 0,theta = 0;
+    S = 1;
+    nearP = 4;
+    farP = 500;
 }
 void Pitch(bool clock = true) {
     // Translate to origin
@@ -81,7 +87,7 @@ void Yaw(bool clock = true) {
     look_x = new_x;
     look_y = new_y;
     look_z = -dz+new_z;
-     cout<<"Yaw:"<<theta<<' '<<new_x<<' '<<new_z<<endl;
+    cout<<"Yaw:"<<theta<<' '<<new_x<<' '<<new_z<<endl;
 }
 void zoom(bool positive = true) {
     float dx = look_x - eye_x;
@@ -388,7 +394,6 @@ void drawPartition(){
     glPopMatrix();
 
 }
-GLfloat idd[]= {1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1};
 void drawWindow() {
     GLfloat p[]= {0,0,0},q[]= {0,1,0},r[]= {0,1,1},s[]= {0,0,1};
     GLfloat color[]= {.55,.94,.88};
@@ -594,16 +599,17 @@ void displayFunction() {
     // Load identity matrix
     glLoadIdentity();
 
-    glFrustum(-5,5,-5,5,4,500);
+    glFrustum(-6,6,-6,6,nearP,farP);
     // Select Matrix for Operation
     glMatrixMode(GL_MODELVIEW);
-    glLoadMatrixf(&idd[0]);
+    glLoadIdentity();
 
     //Set Camera Definition
     gluLookAt(eye_x,eye_y,eye_z,look_x,look_y,look_z,up_x,up_y,up_z);
     glTranslatef(50,-25,0);
     glRotatef(270,0,1,0);
     glViewport(0,0,800,600);
+    glScalef(S,S,S);
     drawMainAxis();
     drawOvens();
     drawPartition();
@@ -624,6 +630,16 @@ void displayFunction() {
     glutSwapBuffers();
 
 
+}
+void Scale(bool positive = true){
+    if(!positive)S-=.1;
+    else S+=.1;
+    if(S<0)S+=.1;
+    if(S>2)S = 2;
+}
+void FrustumChange(bool positive = true){
+    if(positive)nearP++;
+    else nearP--;
 }
 void idleFunction() {
     glutPostRedisplay();
@@ -674,6 +690,18 @@ void keyBoardFunction(unsigned char key,int x,int y) {
         break;
     case 'Z':
         eye_z++;
+        break;
+    case 's':
+        Scale();
+        break;
+    case 'S':
+        Scale(false);
+        break;
+    case 'f':
+        FrustumChange();
+        break;
+    case 'F':
+        FrustumChange(false);
         break;
     }
 }
